@@ -1,0 +1,71 @@
+<div class="signup-container">
+    <mat-card class="signup-card">
+        <mat-card-header>
+            <mat-card-title>
+                <div class="flex items-center gap-2">
+                    <mat-icon class="text-blue-600">person_add</mat-icon>
+                    <span>Create Account</span>
+                </div>
+            </mat-card-title>
+            <mat-card-subtitle>Join us to start shopping!</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="mt-6">
+            <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Full Name</mat-label>
+                    <input matInput type="text" [(ngModel)]="name" name="name"
+                           placeholder="John Doe" required>
+                    <mat-icon matPrefix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" [(ngModel)]="email" name="email"
+                           placeholder="you@example.com" required>
+                    <mat-icon matPrefix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'"
+                           [(ngModel)]="password" name="password" required
+                           minlength="6">
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="hidePassword = !hidePassword">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-hint>Minimum 6 characters</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput [type]="hideConfirm ? 'password' : 'text'"
+                           [(ngModel)]="confirmPassword" name="confirmPassword" required>
+                    <mat-icon matPrefix>lock_outline</mat-icon>
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="hideConfirm = !hideConfirm">
+                        <mat-icon>{{ hideConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <button mat-flat-button color="primary" type="submit"
+                        class="w-full !py-3 !text-base !rounded-lg !mt-2"
+                        [disabled]="!name || !email || !password || !confirmPassword">
+                    Create Account
+                </button>
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions class="!px-4 !pb-4">
+            <div class="w-full text-center">
+                <span class="text-gray-500 text-sm">Already have an account?</span>
+                <a mat-button color="primary" routerLink="/login" class="!text-sm">
+                    Sign In
+                </a>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+</div>

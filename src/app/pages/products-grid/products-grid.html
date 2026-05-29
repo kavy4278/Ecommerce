@@ -1,0 +1,126 @@
+<mat-sidenav-container class="h-[calc(100vh-64px)] bg-gray-100">
+
+    <!-- SIDENAV -->
+    <mat-sidenav
+        mode="side"
+        opened
+        class="w-[260px] p-4 border-r bg-white"
+    >
+
+        <h2 class="text-2xl font-bold mb-6">
+            Categories
+        </h2>
+
+        <mat-nav-list>
+            @for (cat of categories(); track cat) {
+                <mat-list-item class="my-2" [routerLink]="['/products', cat.toLowerCase()]" [activated]="cat.toLowerCase() === category().toLowerCase()">
+                    <span matListItemTitle [class.!text-white]="cat.toLowerCase() === category().toLowerCase()">{{ cat }}</span>
+                </mat-list-item>
+            }
+        </mat-nav-list>
+
+    </mat-sidenav>
+
+    <!-- MAIN CONTENT -->
+    <mat-sidenav-content #content class="p-6">
+
+        <!-- PAGE HEADER -->
+        <div
+            class="mb-8 flex items-center justify-between border-b border-gray-200 pb-4"
+        >
+
+            <h1
+                class="text-3xl font-extrabold text-gray-900 capitalize tracking-tight"
+            >
+                {{ category() === 'all' ? 'All Products' : category() }}
+            </h1>
+
+            <span
+                class="text-sm font-medium text-gray-600 bg-gray-200 px-4 py-2 rounded-full shadow-sm"
+            >
+                {{ filteredproducts().length }} Items
+            </span>
+
+        </div>
+
+        <!-- PRODUCT LIST -->
+        <div class="flex flex-col gap-6">
+
+            @for (product of filteredproducts(); track product.productLink) {
+
+            <div
+                class="bg-white rounded-2xl shadow-md overflow-hidden flex gap-6 p-5 hover:shadow-xl transition duration-300"
+            >
+
+                <!-- PRODUCT IMAGE -->
+                <div
+                    class="w-[220px] h-[220px] flex items-center justify-center bg-gray-50 rounded-xl shrink-0"
+                >
+
+                    <img
+                        [src]="product.imageUrl"
+                        [alt]="product.productName"
+                        referrerpolicy="no-referrer"
+                        class="max-h-full object-contain hover:scale-105 transition duration-300"
+                    />
+
+                </div>
+                <button class="!relative z-10 top-3 right-3 w-10 h-10 rounded-full !bg-white border-0 shadow-md flex items-center justify-center cursor-pointer 
+                transition-all duration-200 scale-110 hover:shadow-lg" mat-icon-button (click)="togglewishlist(product)" [class]="isInWishlist(product) ? '!text-red-500' : '!text-grey'">
+
+                 <mat-icon [class.text-red-500]="isInWishlist(product)">favorite</mat-icon>
+                    
+
+                </button>
+
+                <!-- PRODUCT DETAILS -->
+                <div class="flex flex-col justify-start flex-1">
+
+                    <a
+                        class="text-2xl font-medium text-gray-900 leading-snug hover:text-blue-700 transition cursor-pointer"
+                        [routerLink]="['/product', product.productName]"
+                    >
+                        {{ product.productName }}
+                    </a>
+
+                    <!-- STAR RATING -->
+                    <app-star-rating [rating]="product.rating" class="mt-2"></app-star-rating>
+
+                    <span
+                        class="text-2xl font-semibold text-black mt-4"
+                    >
+                        ₹{{ product.price }}
+                    </span>
+
+                    @if (product.discountPercentage) {
+                        <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold mt-1 inline-block w-fit">
+                            {{ product.discountPercentage }} off
+                        </span>
+                    }
+
+                    <span class="text-sm mt-1"
+                          [class]="product.stockStatus === 'In Stock' ? 'text-green-600' : 'text-orange-500'">
+                        {{ product.stockStatus }}
+                    </span>
+
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        class="w-[170px] my-4"
+                        (click)="store.addtocart(product)"
+                    >
+                        <mat-icon>shopping_cart</mat-icon>
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

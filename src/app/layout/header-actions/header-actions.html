@@ -1,0 +1,70 @@
+<div class="flex items-center gap-2">
+    <div class="relative">
+       <button
+            mat-icon-button
+            routerLink="/wishlist"
+        >
+            <mat-icon>favorite</mat-icon>
+        </button>
+        @if (store.wishlistitems().length > 0) {
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full pointer-events-none z-10">{{ store.wishlistitems().length }}</span>
+        }
+    </div>
+
+    <div class="relative">
+        <button
+            mat-icon-button
+            routerLink="/cart"
+        >
+            <mat-icon>shopping_cart</mat-icon>
+        </button>
+
+        @if (store.cartitems().length > 0) {
+            <span
+                class="absolute
+                       -top-1
+                       -right-1
+                       bg-red-500
+                       text-white
+                       text-[10px]
+                       font-bold
+                       min-w-[18px]
+                       h-[18px]
+                       px-1
+                       flex
+                       items-center
+                       justify-center
+                       rounded-full
+                       pointer-events-none
+                       z-10"
+            >
+                {{ store.cartitems().length }}
+            </span>
+        }
+    </div>
+
+    <!-- Auth buttons -->
+    @if (store.isLoggedIn()) {
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+            <div class="px-4 py-2 border-b border-gray-200">
+                <p class="font-semibold text-gray-800">{{ store.currentUser()?.name }}</p>
+                <p class="text-xs text-gray-500">{{ store.currentUser()?.email }}</p>
+            </div>
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+    } @else {
+        <button mat-flat-button routerLink="/login">
+            Login
+        </button>
+
+        <button mat-stroked-button routerLink="/signup">
+            Sign-Up
+        </button>
+    }
+</div>
