@@ -1,10 +1,10 @@
 <mat-sidenav-container class="h-[calc(100vh-64px)] bg-gray-100">
 
-    <!-- SIDENAV -->
+    <!-- SIDENAV (Desktop Only) -->
     <mat-sidenav
         mode="side"
         opened
-        class="w-[260px] p-4 border-r bg-white"
+        class="hidden md:block w-[260px] p-4 border-r bg-white"
     >
 
         <h2 class="text-2xl font-bold mb-6">
@@ -22,11 +22,26 @@
     </mat-sidenav>
 
     <!-- MAIN CONTENT -->
-    <mat-sidenav-content #content class="p-6">
+    <mat-sidenav-content #content class="p-4 md:p-6 w-full max-w-[100vw]">
+
+        <!-- MOBILE CATEGORIES (Hidden on Desktop) -->
+        <div class="md:hidden w-full overflow-x-auto whitespace-nowrap pb-4 mb-4 scrollbar-hide flex gap-2">
+            @for (cat of categories(); track cat) {
+                <button
+                    mat-stroked-button
+                    [class.!bg-blue-600]="cat.toLowerCase() === category().toLowerCase()"
+                    [class.!text-white]="cat.toLowerCase() === category().toLowerCase()"
+                    [routerLink]="['/products', cat.toLowerCase()]"
+                    class="!rounded-full flex-shrink-0"
+                >
+                    {{ cat }}
+                </button>
+            }
+        </div>
 
         <!-- PAGE HEADER -->
         <div
-            class="mb-8 flex items-center justify-between border-b border-gray-200 pb-4"
+            class="mb-6 md:mb-8 flex items-center justify-between border-b border-gray-200 pb-4"
         >
 
             <h1
@@ -43,18 +58,38 @@
 
         </div>
 
+        <!-- CATEGORY OVERVIEW (Only on 'All Products') -->
+        @if (category() === 'all' && categoryOverview().length > 0) {
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 lg:max-w-[850px] xl:max-w-[1000px]">
+                @for (overview of categoryOverview(); track overview.categoryName) {
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 flex flex-col hover:shadow-lg transition duration-300 cursor-pointer" [routerLink]="['/products', overview.categoryName.toLowerCase()]">
+                        <h2 class="text-lg font-bold text-gray-900 text-center mb-4">{{ overview.categoryName }}</h2>
+                        <div class="grid grid-cols-2 gap-3 flex-1 mb-2">
+                            @for (p of overview.products; track p.productName) {
+                                <div class="bg-gray-50 rounded-lg p-2 flex items-center justify-center aspect-square">
+                                    <img [src]="p.imageUrl" [alt]="p.productName" class="max-w-full max-h-full object-contain" referrerpolicy="no-referrer">
+                                </div>
+                            }
+                        </div>
+                        <div class="mt-auto text-blue-600 font-medium text-sm text-center">
+                            Explore {{ overview.categoryName }}
+                        </div>
+                    </div>
+                }
+            </div>
+        } @else {
         <!-- PRODUCT LIST -->
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-6 lg:max-w-[850px] xl:max-w-[1000px]">
 
             @for (product of filteredproducts(); track product.productLink) {
 
             <div
-                class="bg-white rounded-2xl shadow-md overflow-hidden flex gap-6 p-5 hover:shadow-xl transition duration-300"
+                class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row gap-6 p-5 hover:shadow-xl transition duration-300 relative"
             >
 
                 <!-- PRODUCT IMAGE -->
                 <div
-                    class="w-[220px] h-[220px] flex items-center justify-center bg-gray-50 rounded-xl shrink-0"
+                    class="w-full md:w-[220px] h-[220px] flex items-center justify-center bg-gray-50 rounded-xl shrink-0"
                 >
 
                     <img
@@ -65,8 +100,8 @@
                     />
 
                 </div>
-                <button class="!relative z-10 top-3 right-3 w-10 h-10 rounded-full !bg-white border-0 shadow-md flex items-center justify-center cursor-pointer 
-                transition-all duration-200 scale-110 hover:shadow-lg" mat-icon-button (click)="togglewishlist(product)" [class]="isInWishlist(product) ? '!text-red-500' : '!text-grey'">
+                <button class="absolute z-10 top-3 right-3 w-10 h-10 rounded-full !bg-white border-0 shadow-md flex items-center justify-center cursor-pointer 
+                transition-all duration-200 scale-110 hover:shadow-lg" mat-icon-button (click)="togglewishlist(product)" [class]="isInWishlist(product) ? '!text-red-500' : '!text-gray-400'">
 
                  <mat-icon [class.text-red-500]="isInWishlist(product)">favorite</mat-icon>
                     
@@ -106,7 +141,7 @@
                     <button
                         mat-flat-button
                         color="primary"
-                        class="w-[170px] my-4"
+                        class="w-full md:w-[170px] my-4"
                         (click)="store.addtocart(product)"
                     >
                         <mat-icon>shopping_cart</mat-icon>
@@ -120,6 +155,7 @@
             }
 
         </div>
+        }
 
     </mat-sidenav-content>
 

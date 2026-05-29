@@ -59,6 +59,24 @@ export class ProductsGrid {
     return this.store.products().filter((p) => p.category.toLowerCase() === filterCat); 
   })
 
+  categoryOverview = computed(() => {
+    if (this.category().toLowerCase() !== 'all') return [];
+    
+    const overview = [];
+    const allProducts = this.store.products();
+    for (const cat of this.categories()) {
+      if (cat.toLowerCase() === 'all') continue;
+      const productsInCat = allProducts.filter(p => p.category.toLowerCase() === cat.toLowerCase()).slice(0, 4);
+      if (productsInCat.length > 0) {
+        overview.push({
+          categoryName: cat,
+          products: productsInCat
+        });
+      }
+    }
+    return overview;
+  });
+
    addtocart(product: Product) {
     this.store.addtocart(product);
   }

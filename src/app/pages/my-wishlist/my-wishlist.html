@@ -29,12 +29,12 @@
         ) {
 
         <div
-            class="bg-white rounded-2xl shadow-md overflow-hidden flex gap-6 p-5 hover:shadow-xl transition duration-300"
+            class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col md:flex-row gap-6 p-5 hover:shadow-xl transition duration-300 relative"
         >
 
             <!-- PRODUCT IMAGE -->
             <div
-                class="w-[220px] h-[220px] flex items-center justify-center bg-gray-50 rounded-xl shrink-0"
+                class="w-full md:w-[220px] h-[220px] flex items-center justify-center bg-gray-50 rounded-xl shrink-0"
             >
 
                 <img
@@ -81,13 +81,13 @@
                 </span>
 
                 <!-- ACTIONS ROW -->
-                <div class="flex items-center gap-3 my-4">
+                <div class="flex flex-col sm:flex-row items-center gap-3 my-4">
 
                     <!-- ADD TO CART -->
                     <button
                         mat-flat-button
                         color="primary"
-                        class="w-[170px]"
+                        class="w-full sm:w-[170px]"
                         (click)="addtocart(product)"
                     >
                         <mat-icon>shopping_cart</mat-icon>
@@ -97,7 +97,7 @@
                     <!-- REMOVE FROM WISHLIST -->
                     <button
                         mat-flat-button
-                        class="!bg-red-500 !text-white w-[220px]"
+                        class="!bg-red-500 !text-white w-full sm:w-[220px]"
                         (click)="togglewishlist(product)"
                     >
                         <mat-icon>delete_outline</mat-icon>
